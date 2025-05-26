@@ -37,9 +37,8 @@ appendRow.addEventListener('click', () => {
 
   for (let i = 0; i < colCount; i++) {
     newRow.insertCell();
+    updateRowButtons();
   }
-
-  updateRowButtons();
 });
 
 appendColumn.addEventListener('click', () => {
@@ -51,21 +50,19 @@ appendColumn.addEventListener('click', () => {
 
   Array.from(table.rows).forEach((row) => {
     row.insertCell();
+    updateColumnButtons();
   });
-
-  updateColumnButtons();
 });
 
 removeRow.addEventListener('click', () => {
   if (table.rows.length > 2) {
     table.deleteRow(-1);
+    updateRowButtons();
   }
 
   if (table.rows.length <= MIN_ROWS) {
-    return;
+    return 0;
   }
-
-  updateRowButtons();
 });
 
 removeColumn.addEventListener('click', () => {
@@ -75,11 +72,11 @@ removeColumn.addEventListener('click', () => {
     Array.from(table.rows).forEach((row) => {
       row.deleteCell(-1);
     });
+
+    updateColumnButtons();
   }
 
   if (colCount <= MIN_COLUMNS) {
-    return;
+    return 0;
   }
-
-  updateColumnButtons();
 });
