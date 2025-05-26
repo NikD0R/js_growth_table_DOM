@@ -11,13 +11,25 @@ const MAX_COLUMNS = 10;
 const MIN_ROWS = 2;
 const MIN_COLUMNS = 2;
 
+function updateColumnButtons() {
+  const currentColCount = table.rows[0]?.cells.length || 0;
+
+  appendColumn.disabled = currentColCount >= MAX_COLUMNS;
+  removeColumn.disabled = currentColCount <= MIN_COLUMNS;
+}
+
+function updateRowButtons() {
+  const rowCount = table.rows.length;
+
+  appendRow.disabled = rowCount >= MAX_ROWS;
+  removeRow.disabled = rowCount <= MIN_ROWS;
+}
+
 appendRow.addEventListener('click', () => {
   const rowCount = table.rows.length;
   const colCount = table.rows[0].cells.length;
 
   if (rowCount >= MAX_ROWS) {
-    appendRow.disabled = true;
-
     return;
   }
 
@@ -27,18 +39,13 @@ appendRow.addEventListener('click', () => {
     newRow.insertCell();
   }
 
-  // Вмикаємо removeRow, якщо є більше ніж 2 рядки
-  if (rowCount < MAX_ROWS) {
-    removeRow.disabled = false;
-  }
+  updateRowButtons();
 });
 
 appendColumn.addEventListener('click', () => {
   const colCount = table.rows[0].cells.length;
 
   if (colCount >= MAX_COLUMNS) {
-    appendColumn.disabled = true;
-
     return;
   }
 
@@ -46,10 +53,7 @@ appendColumn.addEventListener('click', () => {
     row.insertCell();
   });
 
-  // Вмикаємо removeColumn, якщо є більше ніж 2 колонки
-  if (colCount < MAX_COLUMNS) {
-    removeColumn.disabled = false;
-  }
+  updateColumnButtons();
 });
 
 removeRow.addEventListener('click', () => {
@@ -58,12 +62,10 @@ removeRow.addEventListener('click', () => {
   }
 
   if (table.rows.length <= MIN_ROWS) {
-    removeRow.disabled = true;
+    return;
   }
 
-  if (table.rows.length > MIN_ROWS) {
-    appendRow.disabled = false;
-  }
+  updateRowButtons();
 });
 
 removeColumn.addEventListener('click', () => {
@@ -76,10 +78,8 @@ removeColumn.addEventListener('click', () => {
   }
 
   if (colCount <= MIN_COLUMNS) {
-    removeColumn.disabled = true;
+    return;
   }
 
-  if (colCount > MIN_COLUMNS) {
-    appendColumn.disabled = false;
-  }
+  updateColumnButtons();
 });
